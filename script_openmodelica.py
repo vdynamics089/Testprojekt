@@ -28,6 +28,7 @@ def get_mo_file(path):
 def export_model_to_fmu(mo_file_path: Path, model_name: str, omc) -> Path:
     # Export the model to FMU
     print("building fmu with model:", model_name)
+    omc.sendExpression('setCommandLineOptions("-d=initialization")')
     omc.sendExpression(f'translateModelFMU("{model_name}", version="2.0", fmuType="cs")')
     fmu_file_path = Path(f"{model_name}.fmu")
     print("new fmu at:", mo_file_path)
