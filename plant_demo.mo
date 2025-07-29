@@ -5,7 +5,7 @@ model plant_demo "Demonstrates the usage of a Continuous.LimPID controller"
     Placement(transformation(origin = {-42, 16}, extent = {{2, -20}, {22, 0}})));
   Modelica.Mechanics.Rotational.Sources.Torque torque annotation(
     Placement(transformation(origin = {-42, 16}, extent = {{-25, -20}, {-5, 0}})));
-  Modelica.Mechanics.Rotational.Components.SpringDamper spring(c = 1e4, d = 100, stateSelect = StateSelect.prefer, w_rel(fixed = true)) annotation(
+  Modelica.Mechanics.Rotational.Components.SpringDamper spring(c = 1e4, d = 100, stateSelect = StateSelect.prefer) annotation(
     Placement(transformation(origin = {-42, 16}, extent = {{32, -20}, {52, 0}})));
   Modelica.Mechanics.Rotational.Components.Inertia inertia2(J = 2) annotation(
     Placement(transformation(origin = {-42, 16}, extent = {{60, -20}, {80, 0}})));
@@ -17,8 +17,6 @@ model plant_demo "Demonstrates the usage of a Continuous.LimPID controller"
     Placement(transformation(origin = {-94, 46}, extent = {{-20, -20}, {20, 20}}), iconTransformation(origin = {-90, 6}, extent = {{-20, -20}, {20, 20}})));
   Modelica.Blocks.Interfaces.RealOutput Sensor annotation(
     Placement(transformation(origin = {-82, -24}, extent = {{-10, -10}, {10, 10}}), iconTransformation(origin = {-76, -22}, extent = {{-10, -10}, {10, 10}})));
-initial equation
-  der(spring.w_rel) = 0;
 equation
   connect(spring.flange_b, inertia2.flange_a) annotation(
     Line(points = {{10, 6}, {18, 6}}));
@@ -36,7 +34,7 @@ equation
     Line(points = {{-40, -24}, {-82, -24}}, color = {0, 0, 127}));
   annotation(
     Diagram(coordinateSystem(preserveAspectRatio = true, extent = {{-100, -100}, {100, 100}}), graphics = {Rectangle(origin = {-42, 16}, lineColor = {255, 0, 0}, extent = {{-25, 6}, {99, -50}}), Text(origin = {-42, 16}, textColor = {255, 0, 0}, extent = {{4, 14}, {71, 7}}, textString = "plant (simple drive train)")}),
-    experiment(StopTime = 4),
+  experiment(StopTime = 6000, StartTime = 0, Tolerance = 1e-06, Interval = 0.01),
     Documentation(info = "<html>
 
 <p>
@@ -96,5 +94,7 @@ is forced back to its limit after a transient phase.
 </p>
 
 </html>"),
-    uses(Modelica(version = "4.0.0")));
+    uses(Modelica(version = "4.0.0")),
+  __OpenModelica_simulationFlags(lv = "LOG_STDOUT,LOG_ASSERT,LOG_STATS", s = "euler", variableFilter = ".*"),
+  __OpenModelica_commandLineOptions = "--matchingAlgorithm=PFPlusExt --indexReductionMethod=dynamicStateSelection -d=initialization,NLSanalyticJacobian");
 end plant_demo;

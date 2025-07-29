@@ -8,23 +8,21 @@ model PI_Controller "Demonstrates the usage of a Continuous.LimPID controller"
   Modelica.Blocks.Continuous.Integrator integrator(initType = Modelica.Blocks.Types.Init.InitialState) annotation(
     Placement(transformation(origin = {56, -8}, extent = {{-63, 20}, {-43, 40}})));
   Modelica.Blocks.Interfaces.RealInput Sensor annotation(
-    Placement(transformation(origin = {-58, -30}, extent = {{-20, -20}, {20, 20}}), iconTransformation(origin = {-38, -30}, extent = {{-20, -20}, {20, 20}})));
+    Placement(transformation(origin = {-76, -68}, extent = {{-20, -20}, {20, 20}}), iconTransformation(origin = {-38, -30}, extent = {{-20, -20}, {20, 20}})));
   Modelica.Blocks.Interfaces.RealOutput Aktor annotation(
-    Placement(transformation(origin = {52, -18}, extent = {{-10, -10}, {10, 10}}), iconTransformation(origin = {52, -18}, extent = {{-10, -10}, {10, 10}})));
-initial equation
-  der(spring.w_rel) = 0;
+    Placement(transformation(origin = {82, -18}, extent = {{-10, -10}, {10, 10}}), iconTransformation(origin = {52, -18}, extent = {{-10, -10}, {10, 10}})));
 equation
   connect(kinematicPTP.y[1], integrator.u) annotation(
     Line(points = {{-15, 22}, {-9, 22}}, color = {0, 0, 127}));
   connect(integrator.y, PI.u_s) annotation(
     Line(points = {{14, 22}, {19, 22}, {19, 3}, {-11, 3}, {-11, -18}, {-2, -18}}, color = {0, 0, 127}));
   connect(PI.u_m, Sensor) annotation(
-    Line(points = {{10, -30}, {-58, -30}}, color = {0, 0, 127}));
+    Line(points = {{10, -30}, {-24, -30}, {-24, -68}, {-76, -68}}, color = {0, 0, 127}));
   connect(PI.y, Aktor) annotation(
-    Line(points = {{22, -18}, {52, -18}}, color = {0, 0, 127}));
+    Line(points = {{22, -18}, {82, -18}}, color = {0, 0, 127}));
   annotation(
     Diagram(coordinateSystem(preserveAspectRatio = true, extent = {{-100, -100}, {100, 100}}), graphics = {Rectangle(origin = {56, -8}, lineColor = {255, 0, 0}, extent = {{-99, 48}, {-32, 8}}), Text(origin = {56, -8}, textColor = {255, 0, 0}, extent = {{-98, 59}, {-31, 51}}, textString = "reference speed generation"), Text(origin = {56, -8}, textColor = {255, 0, 0}, extent = {{-98, -46}, {-60, -52}}, textString = "PI controller"), Line(origin = {56, -8}, points = {{-76, -44}, {-57, -23}}, color = {255, 0, 0}, arrow = {Arrow.None, Arrow.Filled})}),
-    experiment(StopTime = 4),
+  experiment(StopTime = 6000, StartTime = 0, Tolerance = 1e-06, Interval = 0.01),
     Documentation(info = "<html>
 
 <p>
@@ -84,5 +82,7 @@ is forced back to its limit after a transient phase.
 </p>
 
 </html>"),
-    uses(Modelica(version = "4.0.0")));
+    uses(Modelica(version = "4.0.0")),
+  __OpenModelica_commandLineOptions = "--matchingAlgorithm=PFPlusExt --indexReductionMethod=dynamicStateSelection -d=initialization,NLSanalyticJacobian",
+  __OpenModelica_simulationFlags(lv = "LOG_STDOUT,LOG_ASSERT,LOG_STATS", s = "dassl", variableFilter = ".*"));
 end PI_Controller;
